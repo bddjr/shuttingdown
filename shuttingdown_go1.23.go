@@ -16,16 +16,8 @@ var offset_inShutdown = func() uintptr {
 		panic("github.com/bddjr/shuttingdown: failed to get offset of http.Server.inShutdown")
 	}
 	// Automatic type checking
-	const errmsg = "github.com/bddjr/shuttingdown: failed to check type of http.Server.inShutdown"
-	b := reflect.TypeFor[atomic.Bool]()
-	if sf.Type.Kind() != b.Kind() {
-		panic(errmsg)
-	}
-	if sf.Type.PkgPath() != b.PkgPath() {
-		panic(errmsg)
-	}
-	if sf.Type.Name() != b.Name() {
-		panic(errmsg)
+	if sf.Type != reflect.TypeFor[atomic.Bool]() {
+		panic("github.com/bddjr/shuttingdown: failed to check type of http.Server.inShutdown")
 	}
 	return sf.Offset
 }()
