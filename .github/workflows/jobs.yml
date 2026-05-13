@@ -1,0 +1,29 @@
+name: Jobs
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version:
+          - "stable"
+          - "1.23.0"
+          - "1.22"
+          - "1.11.0"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go-version }}
+          check-latest: true
+
+      - name: Test
+        run: |
+          go version
+          go test
