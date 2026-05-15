@@ -1,3 +1,3 @@
 module github.com/bddjr/shuttingdown
 
-go 1.11
+go 1.8

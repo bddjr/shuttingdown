@@ -1,3 +1,6 @@
+//go:build go1.11
+// +build go1.11
+
 package shuttingdown_test
 
 import (
