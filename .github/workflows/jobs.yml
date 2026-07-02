@@ -3,13 +3,13 @@ name: Jobs
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
     strategy:
       matrix:
         go-version:
-          - "stable"
           - "1.23.0"
           - "1.22"
           - "1.11.0"
@@ -22,6 +22,29 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           check-latest: true
+
+      - name: Test
+        run: |
+          go version
+          go test
+
+  test-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest Go version (including RC)
+        id: get-version
+        run: |
+          JSON=$(curl --compressed -s "https://go.dev/dl/?mode=json&include=all")
+          VERSION=$(echo "$JSON" | jq -r '.[0].version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ steps.get-version.outputs.version }}
+          go-download-base-url: "https://go.dev/dl"
+
+      - uses: actions/checkout@v6
 
       - name: Test
         run: |
